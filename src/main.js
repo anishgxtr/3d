@@ -1,4 +1,7 @@
 import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import './style.css';
 
 // 1. Create the scene: the 3D world that will contain our objects.
@@ -20,12 +23,27 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.15;
 container.appendChild(renderer.domElement);
 
+const composer = new EffectComposer(renderer);
+
+composer.addPass(new RenderPass(scene, camera));
+
+const bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  1.3,  // Strength
+  0.5,  // Radius
+  0.2   // Threshold
+);
+
+composer.addPass(bloomPass);
+
 // 4. Build a cube from geometry (shape) and material (surface appearance).
 const geometry = new THREE.BoxGeometry(1.8, 1.8, 1.8);
 const material = new THREE.MeshStandardMaterial({
   color: '#8494ff',
-  metalness: 0,
-  roughness: 0,
+  metalness: 0.5,
+  roughness: 0.2,
+  emissive: '#5265ff',
+  emissiveIntensity: 1.5
 });
 const cube = new THREE.Mesh(geometry, material);
 cube.rotation.set(0.35, 0.55, 0);
@@ -65,7 +83,7 @@ function resize() {
 }
 const resizeObserver = new ResizeObserver(resize);
 resizeObserver.observe(container);
-resize();
+resize(composer.setSize(width, height););
 
 // Mouse/touch drag interaction.
 let isDragging = false;
@@ -108,7 +126,7 @@ function animate() {
   cube.rotation.y = THREE.MathUtils.lerp(cube.rotation.y, targetRotationY, 0.08);
   ring.rotation.z = elapsed * 0.08;
 
-  renderer.render(scene, camera);
+  composer.render();
   requestAnimationFrame(animate);
 }
 animate();
