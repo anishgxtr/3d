@@ -79,8 +79,7 @@ function resize() {
   const height = container.clientHeight;
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
-  renderer.setSize(width, height);
-}
+  resize();
 const resizeObserver = new ResizeObserver(resize);
 resizeObserver.observe(container);
 composer.setSize(width, height);
