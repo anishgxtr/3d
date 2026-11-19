@@ -13,7 +13,6 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  text-shadow: 5 5 8px rgba(156, 169, 255, 0.25);
   background:
     radial-gradient(ellipse at 72% 48%, rgba(55, 84, 83, .22), transparent 42%),
     #090b12;
@@ -110,4 +109,7 @@ h1 em { color: #9ca9ff; font-style: normal; }
   .description { margin: 20px 0; }
   .scene-wrap { height: 105vw; min-height: 340px; max-height: 520px; margin-top: -5px; }
   .footer { font-size: 9px; }
+}
+body{
+  text-shadow: 5 5 8px rgba(156, 169, 255, 0.25);
 }
