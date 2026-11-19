@@ -45,7 +45,7 @@ scene.add(modelGroup);
 const loader = new GLTFLoader();
 
 loader.load(
-  'public/models/my-model.glb',
+  '/models/my-model.glb',
 
   (gltf) => {
     const model = gltf.scene;
@@ -99,19 +99,22 @@ scene.add(ring);
 function resize() {
   const width = container.clientWidth;
   const height = container.clientHeight;
+
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
+
+  renderer.setSize(width, height);
   composer.setSize(width, height);
 }
 const resizeObserver = new ResizeObserver(resize);
 resizeObserver.observe(container);
-composer.setSize(width, height);
+resize();
 // Mouse/touch drag interaction.
 let isDragging = false;
 let previousX = 0;
 let previousY = 0;
-let targetRotationX = cube.rotation.x;
-let targetRotationY = cube.rotation.y;
+let targetRotationX = modelGroup.rotation.x;
+let targetRotationY = modelGroup.rotation.y;
 
 container.addEventListener('pointerdown', (event) => {
   isDragging = true;
@@ -141,11 +144,26 @@ const clock = new THREE.Clock();
 function animate() {
   const elapsed = clock.getElapsedTime();
 
-  if (!isDragging) targetRotationY += 0.0025;
+  if (!isDragging) {
+    targetRotationY += 0.0025;
+  }
 
-  modelGroup.rotation.x = THREE.MathUtils.lerp(modelGroup.rotation.x, targetRotationX, 0.08);
-  modelGroup.rotation.x = THREE.MathUtils.lerp(modelGroup.rotation.x, targetRotationX, 0.08);
-  composer.setSize(width, height);
+  modelGroup.rotation.x = THREE.MathUtils.lerp(
+    modelGroup.rotation.x,
+    targetRotationX,
+    0.08
+  );
+
+  modelGroup.rotation.y = THREE.MathUtils.lerp(
+    modelGroup.rotation.y,
+    targetRotationY,
+    0.08
+  );
+
+  ring.rotation.z = elapsed * 0.08;
+
+  composer.render();
+
   requestAnimationFrame(animate);
 }
 animate();
