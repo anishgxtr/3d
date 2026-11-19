@@ -13,6 +13,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  text-shadow: 0 0 8px rgba(156, 169, 255, 0.25);
   background:
     radial-gradient(ellipse at 72% 48%, rgba(55, 84, 83, .22), transparent 42%),
     #090b12;
