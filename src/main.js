@@ -125,7 +125,7 @@ function animate() {
   cube.rotation.y = THREE.MathUtils.lerp(cube.rotation.y, targetRotationY, 0.08);
   ring.rotation.z = elapsed * 0.08;
 
-  renderer.render(scene, camera);
+  composer.setSize(width, height);
   requestAnimationFrame(animate);
 }
 animate();
