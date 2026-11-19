@@ -45,7 +45,7 @@ scene.add(modelGroup);
 const loader = new GLTFLoader();
 
 loader.load(
-  '/models/my-model.glb',
+  'public/models/my-model.glb',
 
   (gltf) => {
     const model = gltf.scene;
