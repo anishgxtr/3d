@@ -24,8 +24,8 @@ container.appendChild(renderer.domElement);
 const geometry = new THREE.BoxGeometry(1.8, 1.8, 1.8);
 const material = new THREE.MeshStandardMaterial({
   color: '#8494ff',
-  metalness: 0.38,
-  roughness: 0.24,
+  metalness: 1,
+  roughness: 1,
 });
 const cube = new THREE.Mesh(geometry, material);
 cube.rotation.set(0.35, 0.55, 0);
