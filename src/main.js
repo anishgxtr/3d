@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import './style.css';
 
 // 1. Create the scene: the 3D world that will contain our objects.
@@ -36,19 +37,40 @@ const bloomPass = new UnrealBloomPass(
 
 composer.addPass(bloomPass);
 
-// 4. Build a cube from geometry (shape) and material (surface appearance).
-const geometry = new THREE.BoxGeometry(1.8, 1.8, 1.8);
-const material = new THREE.MeshStandardMaterial({
-  color: '#8494ff',
-  metalness: 0.5,
-  roughness: 0.2,
-  emissive: '#5265ff',
-  emissiveIntensity: 1.5
-});
-const cube = new THREE.Mesh(geometry, material);
-cube.rotation.set(0.35, 0.55, 0);
-scene.add(cube);
+// Create a group to hold our imported model
+const modelGroup = new THREE.Group();
+scene.add(modelGroup);
 
+// Load the Blender model
+const loader = new GLTFLoader();
+
+loader.load(
+  '/models/my-model.glb',
+
+  (gltf) => {
+    const model = gltf.scene;
+
+    // Find the model's dimensions
+    const box = new THREE.Box3().setFromObject(model);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+
+    // Centre and automatically scale the model
+    const maxDimension = Math.max(size.x, size.y, size.z);
+    model.position.sub(center);
+    model.scale.setScalar(2.2 / maxDimension);
+
+    modelGroup.add(model);
+
+    console.log('Model loaded successfully!');
+  },
+
+  undefined,
+
+  (error) => {
+    console.error('Error loading model:', error);
+  }
+);
 // 5. Add lights so the material has highlights and shading.
 const ambientLight = new THREE.AmbientLight('#aab4ff', 1.1);
 scene.add(ambientLight);
@@ -121,10 +143,8 @@ function animate() {
 
   if (!isDragging) targetRotationY += 0.0025;
 
-  cube.rotation.x = THREE.MathUtils.lerp(cube.rotation.x, targetRotationX, 0.08);
-  cube.rotation.y = THREE.MathUtils.lerp(cube.rotation.y, targetRotationY, 0.08);
-  ring.rotation.z = elapsed * 0.08;
-
+  modelGroup.rotation.x = THREE.MathUtils.lerp(modelGroup.rotation.x, targetRotationX, 0.08);
+  modelGroup.rotation.x = THREE.MathUtils.lerp(modelGroup.rotation.x, targetRotationX, 0.08);
   composer.setSize(width, height);
   requestAnimationFrame(animate);
 }
