@@ -83,7 +83,7 @@ function resize() {
 }
 const resizeObserver = new ResizeObserver(resize);
 resizeObserver.observe(container);
-resize(composer.setSize(width, height););
+resize();
 
 // Mouse/touch drag interaction.
 let isDragging = false;
