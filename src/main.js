@@ -79,7 +79,8 @@ function resize() {
   const height = container.clientHeight;
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
-  resize();
+  renderer.setSize(width, height);
+}
 const resizeObserver = new ResizeObserver(resize);
 resizeObserver.observe(container);
 composer.setSize(width, height);
@@ -124,7 +125,7 @@ function animate() {
   cube.rotation.y = THREE.MathUtils.lerp(cube.rotation.y, targetRotationY, 0.08);
   ring.rotation.z = elapsed * 0.08;
 
-  renderer.render(scene, camera);
+  composer.setSize(width, height);
   requestAnimationFrame(animate);
 }
 animate();
