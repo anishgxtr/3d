@@ -98,7 +98,12 @@ rimLight.position.set(-3, -1, -2);
 scene.add(rimLight);
 
 // A subtle wireframe sphere behind the cube adds depth to the composition.
-
+const ringGeometry = new THREE.TorusGeometry(2.35, 0.004, 8, 120);
+const ringMaterial = new THREE.MeshBasicMaterial({
+  color: '#6875b9',
+  transparent: true,
+  opacity: 0.32,
+});
 const ring = new THREE.Mesh(ringGeometry, ringMaterial);
 ring.rotation.x = 1.12;
 ring.rotation.y = 0.25;
