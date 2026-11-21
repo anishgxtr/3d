@@ -13,6 +13,18 @@ scene.background = new THREE.Color('#090b12');
 // 2. Create a camera: this is the viewpoint looking into the scene.
 const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
 camera.position.set(0, 0, 6);
+
+
+// 3. Create the renderer: Three.js uses WebGL to draw the scene.
+const container = document.querySelector('#scene');
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+container.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 
 controls.enableDamping = true;
@@ -26,18 +38,6 @@ controls.maxDistance = 15;
 controls.enablePan = true;
 controls.enableZoom = true;
 controls.enableRotate = true;
-
-// 3. Create the renderer: Three.js uses WebGL to draw the scene.
-const container = document.querySelector('#scene');
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.15;
-container.appendChild(renderer.domElement);
-
 const composer = new EffectComposer(renderer);
 
 composer.addPass(new RenderPass(scene, camera));
@@ -124,11 +124,6 @@ const resizeObserver = new ResizeObserver(resize);
 resizeObserver.observe(container);
 resize();
 // Mouse/touch drag interaction.
-let isDragging = false;
-let previousX = 0;
-let previousY = 0;
-let targetRotationX = modelGroup.rotation.x;
-let targetRotationY = modelGroup.rotation.y;
 
 container.addEventListener('pointerdown', (event) => {
   isDragging = true;
@@ -165,29 +160,18 @@ scene.add(grid);
 const clock = new THREE.Clock();
 
 function animate() {
+  requestAnimationFrame(animate);
+
   const elapsed = clock.getElapsedTime();
 
-  if (!isDragging) {
-    targetRotationY += 0.0025;
-  }
-
-  //modelGroup.rotation.x = THREE.MathUtils.lerp(
-    //modelGroup.rotation.x,
-    //targetRotationX,
-    //0.08
-  //);
-//
- // modelGroup.rotation.y = THREE.MathUtils.lerp(
-  //  modelGroup.rotation.y,
-   // targetRotationY,
-   // 0.08
-//  );
-
-  ring.rotation.z = elapsed * 0.08;
+  // Update camera controls
   controls.update();
 
-  composer.render();
+  // Optional: keep the decorative ring rotating
+  ring.rotation.z = elapsed * 0.08;
 
-  requestAnimationFrame(animate);
+  // Render the scene with bloom
+  composer.render();
 }
+
 animate();
