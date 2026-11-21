@@ -137,7 +137,16 @@ function stopDragging() { isDragging = false; }
 container.addEventListener('pointerup', stopDragging);
 container.addEventListener('pointercancel', stopDragging);
 container.addEventListener('lostpointercapture', stopDragging);
+// Static reference grid
+const grid = new THREE.GridHelper(
+  20,       // Total grid size
+  40,       // Number of divisions
+  0x6875b9, // Centre line colour
+  0x30364d  // Grid line colour
+);
 
+grid.position.y = -1.5;
+scene.add(grid);
 // 6. Render continuously: this loop runs once for every animation frame.
 const clock = new THREE.Clock();
 
