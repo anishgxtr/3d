@@ -68,6 +68,7 @@ loader.load(
     const box = new THREE.Box3().setFromObject(model);
     const center = box.getCenter(new THREE.Vector3());
     const size = box.getSize(new THREE.Vector3());
+    
 
     // Centre and automatically scale the model
     const maxDimension = Math.max(size.x, size.y, size.z);
@@ -84,6 +85,18 @@ loader.load(
   (error) => {
     console.error('Error loading model:', error);
   }
+);
+// MODEL POSITION — change these values to move your object
+const MODEL_POSITION = {
+  x: 0,
+  y: 0,
+  z: 6
+};
+
+modelGroup.position.set(
+  MODEL_POSITION.x,
+  MODEL_POSITION.y,
+  MODEL_POSITION.z
 );
 // 5. Add lights so the material has highlights and shading.
 const ambientLight = new THREE.AmbientLight('#aab4ff', 1.1);
