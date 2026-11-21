@@ -168,7 +168,7 @@ function animate() {
   controls.update();
 
   // Optional: keep the decorative ring rotating
-  ring.rotation.z = elapsed * 0.08;
+ 
 
   // Render the scene with bloom
   composer.render();
