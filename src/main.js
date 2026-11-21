@@ -4,6 +4,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import './style.css';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // 1. Create the scene: the 3D world that will contain our objects.
 const scene = new THREE.Scene();
@@ -12,6 +13,19 @@ scene.background = new THREE.Color('#090b12');
 // 2. Create a camera: this is the viewpoint looking into the scene.
 const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
 camera.position.set(0, 0, 6);
+const controls = new OrbitControls(camera, renderer.domElement);
+
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+
+// Zoom limits
+controls.minDistance = 2;
+controls.maxDistance = 15;
+
+// Camera movement
+controls.enablePan = true;
+controls.enableZoom = true;
+controls.enableRotate = true;
 
 // 3. Create the renderer: Three.js uses WebGL to draw the scene.
 const container = document.querySelector('#scene');
@@ -157,19 +171,20 @@ function animate() {
     targetRotationY += 0.0025;
   }
 
-  modelGroup.rotation.x = THREE.MathUtils.lerp(
-    modelGroup.rotation.x,
-    targetRotationX,
-    0.08
-  );
-
-  modelGroup.rotation.y = THREE.MathUtils.lerp(
-    modelGroup.rotation.y,
-    targetRotationY,
-    0.08
-  );
+  //modelGroup.rotation.x = THREE.MathUtils.lerp(
+    //modelGroup.rotation.x,
+    //targetRotationX,
+    //0.08
+  //);
+//
+ // modelGroup.rotation.y = THREE.MathUtils.lerp(
+  //  modelGroup.rotation.y,
+   // targetRotationY,
+   // 0.08
+//  );
 
   ring.rotation.z = elapsed * 0.08;
+  controls.update();
 
   composer.render();
 
